@@ -77,10 +77,7 @@ export default function RaceList() {
         },
         cell: ({ row }) => (
           <div className="lowercase">
-            <Link
-              to={"/races/$id"}
-              params={{ id: row.getValue("id") as string }}
-            >
+            <Link to={"/races/$id"} params={{ id: row.original.id as string }}>
               {row.getValue("name")}
             </Link>
           </div>
@@ -95,16 +92,6 @@ export default function RaceList() {
           const item = row.original;
           return (
             <div className={"space-x-2"}>
-              <Link to="/races/$id" params={{ id: item.id }}>
-                <Button
-                  size="icon"
-                  className="cursor-pointer"
-                  variant="secondary"
-                >
-                  <PencilIcon />
-                </Button>
-              </Link>
-
               <Link to="/races/$id/results" params={{ id: item.id }}>
                 <Button
                   size="icon"
