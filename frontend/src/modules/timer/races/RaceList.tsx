@@ -43,63 +43,32 @@ export default function RaceList() {
   });
 
   const removeQuery = useMutation({
-    mutationFn: async (id: string) => await httpClient.delete(`/api/timer/races/${id}`),
+    mutationFn: async (id: string) =>
+      await httpClient.delete(`/api/timer/races/${id}`),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ["races"] });
     },
   });
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const columns: ColumnDef<RaceType>[] = useMemo(
     () => [
-      {
-        id: "select",
-        maxSize: 10,
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-        enableHiding: false,
-      },
-      {
-        accessorKey: "id",
-        header: "ID",
-        maxSize: 30,
-        cell: ({ row }) => {
-          const userId = row.getValue("id") as string;
-
-          return (
-            <Link to={"/races/$id"} params={{ id: userId }}>
-              {userId.slice(0, 8)}
-            </Link>
-          );
-        },
-      },
       {
         accessorKey: "name",
         header: ({ column }) => {
           return (
             <Button
               variant="ghost"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
             >
               {i18n.t("raceList.tableHeaderName")}
               <ArrowUpDown />
@@ -108,7 +77,10 @@ export default function RaceList() {
         },
         cell: ({ row }) => (
           <div className="lowercase">
-            <Link to={"/races/$id"} params={{ id: row.getValue("id") as string }}>
+            <Link
+              to={"/races/$id"}
+              params={{ id: row.getValue("id") as string }}
+            >
               {row.getValue("name")}
             </Link>
           </div>
@@ -124,13 +96,21 @@ export default function RaceList() {
           return (
             <div className={"space-x-2"}>
               <Link to="/races/$id" params={{ id: item.id }}>
-                <Button size="icon" className="cursor-pointer" variant="secondary">
+                <Button
+                  size="icon"
+                  className="cursor-pointer"
+                  variant="secondary"
+                >
                   <PencilIcon />
                 </Button>
               </Link>
 
               <Link to="/races/$id/results" params={{ id: item.id }}>
-                <Button size="icon" className="cursor-pointer" variant="secondary">
+                <Button
+                  size="icon"
+                  className="cursor-pointer"
+                  variant="secondary"
+                >
                   <Play />
                 </Button>
               </Link>
@@ -188,7 +168,9 @@ export default function RaceList() {
         <Input
           placeholder={i18n.t("raceList.filterByName")}
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
           className="max-w-sm"
         />
       </div>
@@ -203,10 +185,16 @@ export default function RaceList() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} style={{ width: `${header.getSize()}px` }}>
+                    <TableHead
+                      key={header.id}
+                      style={{ width: `${header.getSize()}px` }}
+                    >
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -216,17 +204,26 @@ export default function RaceList() {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -239,7 +236,10 @@ export default function RaceList() {
       </div>
 
       <Link to={"/races/new"}>
-        <Button className={"cursor-pointer"}> {i18n.t("raceList.createLink")}</Button>
+        <Button className={"cursor-pointer"}>
+          {" "}
+          {i18n.t("raceList.createLink")}
+        </Button>
       </Link>
     </div>
   );
