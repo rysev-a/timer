@@ -4,9 +4,12 @@ export interface AthleteType {
 }
 
 export interface LapType {
+  race_id: string;
+  athlete_id: string;
   id: string;
   count: number;
-  time: number;
+  start_time: string;
+  end_time: string;
 }
 
 export interface RaceType {

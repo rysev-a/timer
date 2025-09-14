@@ -3,6 +3,7 @@ from uuid import UUID
 from advanced_alchemy.base import UUIDAuditBase
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from datetime import datetime
 
 
 class RaceModel(UUIDAuditBase):
@@ -37,8 +38,12 @@ class RaceAthleteModel(UUIDAuditBase):
 class LapModel(UUIDAuditBase):
     __tablename__ = "laps"
 
-    race_athlete_id: Mapped[UUID] = mapped_column(
+    race_id: Mapped[UUID] = mapped_column(
         ForeignKey("races.id", ondelete="CASCADE"), primary_key=True
     )
+    athlete_id: Mapped[UUID] = mapped_column(
+        ForeignKey("athletes.id"), primary_key=True
+    )
     count: Mapped[int]
-    time: Mapped[float]
+    start_time: Mapped[datetime] = mapped_column(nullable=False)
+    end_time: Mapped[datetime] = mapped_column(nullable=True)

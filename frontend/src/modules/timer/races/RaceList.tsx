@@ -43,7 +43,7 @@ export default function RaceList() {
   });
 
   const removeQuery = useMutation({
-    mutationFn: async (id: string) => await httpClient.delete(`/api/races/${id}`),
+    mutationFn: async (id: string) => await httpClient.delete(`/api/timer/races/${id}`),
     onSuccess: () => {
       return queryClient.invalidateQueries({ queryKey: ["races"] });
     },
@@ -238,8 +238,8 @@ export default function RaceList() {
         <TablePagination table={table} />
       </div>
 
-      <Link to={"/admin/users/new"}>
-        <Button className={"cursor-pointer"}> {i18n.t("userList.create")}</Button>
+      <Link to={"/races/new"}>
+        <Button className={"cursor-pointer"}> {i18n.t("raceList.createLink")}</Button>
       </Link>
     </div>
   );

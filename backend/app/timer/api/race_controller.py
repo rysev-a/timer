@@ -8,7 +8,7 @@ from advanced_alchemy.extensions.litestar.providers import (
 )
 from advanced_alchemy.filters import FilterTypes
 from advanced_alchemy.service import OffsetPagination
-from litestar import get, patch
+from litestar import get, patch, post, delete
 from litestar.controller import Controller
 from litestar.dto import DTOConfig
 from litestar.params import Dependency
@@ -84,17 +84,16 @@ class RaceController(Controller):
     ) -> RaceModel:
         return await service.get(item_id)
 
-    # @delete(
-    #     operation_id="DeleteProject",
-    #     path="/{item_id:uuid}",
-    #     guards=[is_project_owner],
-    # )
-    # async def delete_item(
-    #     self,
-    #     item_id: UUID,
-    #     service: ProjectService,
-    # ) -> None:
-    #     await service.delete(item_id)
+    @delete(
+        operation_id="DeleteRace",
+        path="/{item_id:uuid}",
+    )
+    async def delete_item(
+        self,
+        item_id: UUID,
+        service: RaceService,
+    ) -> None:
+        await service.delete(item_id)
 
     @patch(operation_id="UpdateRace", path="/{item_id:str}")
     async def update_user(
@@ -113,29 +112,17 @@ class RaceController(Controller):
         )
 
         return race
-        # data = msgspec.to_builtins(data)
-        #
-        # if data.get("roles") is not None:
-        #     roles = data.pop("roles")
-        #     await auth_service.update_user_roles(user_id, roles)
-        #
-        # await users_service.update(UserModel(id=user_id, **data), auto_commit=True)
-        # return users_service.to_schema(data=user)
 
-    # @post(operation_id="CreateProject", path="/")
-    # async def create_item(
-    #     self, data: CreateProjectRequest, service: ProjectService, request: Request
-    # ) -> ProjectModel:
-    #     if await service.get_one_or_none(ProjectModel.name == data.name):
-    #         raise HTTPException(
-    #             status_code=HTTP_409_CONFLICT,
-    #             detail="Project already exists",
-    #         )
 
-    #     return await service.create(
-    #         ProjectModel(
-    #             name=data.name,
-    #             description=data.description,
-    #             user_id=request.user.get("id"),
-    #         )
-    #     )
+    @post(operation_id="CreateProject", path="/")
+    async def create_item(
+        self, data: CreateRaceRequest, service: RaceService
+    ) -> RaceModel:
+
+
+        return await service.create(
+            RaceModel(
+                name=data.name,
+
+            )
+        )

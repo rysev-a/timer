@@ -17,6 +17,7 @@ import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-passw
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as _authRacesIndexRouteImport } from './routes/__auth/races/index'
 import { Route as _authProjectsIndexRouteImport } from './routes/__auth/projects/index'
+import { Route as _authRacesNewRouteImport } from './routes/__auth/races/new'
 import { Route as _authProjectsNewRouteImport } from './routes/__auth/projects/new'
 import { Route as _authProjectsIdRouteImport } from './routes/__auth/projects/$id'
 import { Route as _authRacesIdIndexRouteImport } from './routes/__auth/races/$id/index'
@@ -68,6 +69,11 @@ const _authRacesIndexRoute = _authRacesIndexRouteImport.update({
 const _authProjectsIndexRoute = _authProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
+  getParentRoute: () => _authRoute,
+} as any)
+const _authRacesNewRoute = _authRacesNewRouteImport.update({
+  id: '/races/new',
+  path: '/races/new',
   getParentRoute: () => _authRoute,
 } as any)
 const _authProjectsNewRoute = _authProjectsNewRouteImport.update({
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/': typeof _authIndexRoute
   '/projects/$id': typeof _authProjectsIdRoute
   '/projects/new': typeof _authProjectsNewRoute
+  '/races/new': typeof _authRacesNewRoute
   '/projects': typeof _authProjectsIndexRoute
   '/races': typeof _authRacesIndexRoute
   '/admin/permissions/$id': typeof _authAdminPermissionsIdRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/': typeof _authIndexRoute
   '/projects/$id': typeof _authProjectsIdRoute
   '/projects/new': typeof _authProjectsNewRoute
+  '/races/new': typeof _authRacesNewRoute
   '/projects': typeof _authProjectsIndexRoute
   '/races': typeof _authRacesIndexRoute
   '/admin/permissions/$id': typeof _authAdminPermissionsIdRoute
@@ -192,6 +200,7 @@ export interface FileRoutesById {
   '/__auth/': typeof _authIndexRoute
   '/__auth/projects/$id': typeof _authProjectsIdRoute
   '/__auth/projects/new': typeof _authProjectsNewRoute
+  '/__auth/races/new': typeof _authRacesNewRoute
   '/__auth/projects/': typeof _authProjectsIndexRoute
   '/__auth/races/': typeof _authRacesIndexRoute
   '/__auth/admin/permissions/$id': typeof _authAdminPermissionsIdRoute
@@ -216,6 +225,7 @@ export interface FileRouteTypes {
     | '/'
     | '/projects/$id'
     | '/projects/new'
+    | '/races/new'
     | '/projects'
     | '/races'
     | '/admin/permissions/$id'
@@ -238,6 +248,7 @@ export interface FileRouteTypes {
     | '/'
     | '/projects/$id'
     | '/projects/new'
+    | '/races/new'
     | '/projects'
     | '/races'
     | '/admin/permissions/$id'
@@ -261,6 +272,7 @@ export interface FileRouteTypes {
     | '/__auth/'
     | '/__auth/projects/$id'
     | '/__auth/projects/new'
+    | '/__auth/races/new'
     | '/__auth/projects/'
     | '/__auth/races/'
     | '/__auth/admin/permissions/$id'
@@ -340,6 +352,13 @@ declare module '@tanstack/react-router' {
       path: '/projects'
       fullPath: '/projects'
       preLoaderRoute: typeof _authProjectsIndexRouteImport
+      parentRoute: typeof _authRoute
+    }
+    '/__auth/races/new': {
+      id: '/__auth/races/new'
+      path: '/races/new'
+      fullPath: '/races/new'
+      preLoaderRoute: typeof _authRacesNewRouteImport
       parentRoute: typeof _authRoute
     }
     '/__auth/projects/new': {
@@ -440,6 +459,7 @@ interface _authRouteChildren {
   _authIndexRoute: typeof _authIndexRoute
   _authProjectsIdRoute: typeof _authProjectsIdRoute
   _authProjectsNewRoute: typeof _authProjectsNewRoute
+  _authRacesNewRoute: typeof _authRacesNewRoute
   _authProjectsIndexRoute: typeof _authProjectsIndexRoute
   _authRacesIndexRoute: typeof _authRacesIndexRoute
   _authAdminPermissionsIdRoute: typeof _authAdminPermissionsIdRoute
@@ -459,6 +479,7 @@ const _authRouteChildren: _authRouteChildren = {
   _authIndexRoute: _authIndexRoute,
   _authProjectsIdRoute: _authProjectsIdRoute,
   _authProjectsNewRoute: _authProjectsNewRoute,
+  _authRacesNewRoute: _authRacesNewRoute,
   _authProjectsIndexRoute: _authProjectsIndexRoute,
   _authRacesIndexRoute: _authRacesIndexRoute,
   _authAdminPermissionsIdRoute: _authAdminPermissionsIdRoute,

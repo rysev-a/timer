@@ -1,8 +1,8 @@
-"""init project
+"""init
 
-Revision ID: ea7dcdd6fb96
+Revision ID: 838e657f604e
 Revises: 
-Create Date: 2025-09-14 08:47:44.002528
+Create Date: 2025-09-14 12:12:27.904384
 
 """
 
@@ -27,7 +27,7 @@ sa.EncryptedText = EncryptedText
 sa.StoredObject = StoredObject
 
 # revision identifiers, used by Alembic.
-revision = 'ea7dcdd6fb96'
+revision = '838e657f604e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -117,15 +117,18 @@ def schema_upgrades() -> None:
     sa.UniqueConstraint('user_id', name=op.f('uq_auth_codes_user_id'))
     )
     op.create_table('laps',
-    sa.Column('race_athlete_id', sa.GUID(length=16), nullable=False),
+    sa.Column('race_id', sa.GUID(length=16), nullable=False),
+    sa.Column('athlete_id', sa.GUID(length=16), nullable=False),
     sa.Column('count', sa.Integer(), nullable=False),
-    sa.Column('time', sa.Float(), nullable=False),
+    sa.Column('start_time', sa.DateTimeUTC(timezone=True), nullable=False),
+    sa.Column('end_time', sa.DateTimeUTC(timezone=True), nullable=True),
     sa.Column('id', sa.GUID(length=16), nullable=False),
     sa.Column('sa_orm_sentinel', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTimeUTC(timezone=True), nullable=False),
     sa.Column('updated_at', sa.DateTimeUTC(timezone=True), nullable=False),
-    sa.ForeignKeyConstraint(['race_athlete_id'], ['races.id'], name=op.f('fk_laps_race_athlete_id_races'), ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('race_athlete_id', 'id', name=op.f('pk_laps'))
+    sa.ForeignKeyConstraint(['athlete_id'], ['athletes.id'], name=op.f('fk_laps_athlete_id_athletes')),
+    sa.ForeignKeyConstraint(['race_id'], ['races.id'], name=op.f('fk_laps_race_id_races'), ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('race_id', 'athlete_id', 'id', name=op.f('pk_laps'))
     )
     op.create_table('races_athletes',
     sa.Column('race_id', sa.GUID(length=16), nullable=False),
