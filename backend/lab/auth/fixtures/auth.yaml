@@ -1,0 +1,117 @@
+permissions:
+  - label: Список пользователей
+    name:  get_users
+    app: users
+    action: get
+  - label: Обновление пользователей
+    name:  update_users
+    app: users
+    action: update
+  - label: Создание пользователей
+    name:  create_users
+    app: users
+    action: create
+  - label: Удаление пользователей
+    name:  delete_users
+    app: users
+    action: delete
+  - label: Список ролей
+    name:  get_roles
+    app: roles
+    action: get
+  - label: Обновление ролей
+    name:  update_roles
+    app: roles
+    action: update
+  - label: Создание ролей
+    name:  create_roles
+    app: roles
+    action: create
+  - label: Удаление ролей
+    name:  delete_roles
+    app: roles
+    action: delete
+  - label: Список прав доступа
+    name:  get_permissions
+    app: permissions
+    action: get
+  - label: Обновление прав доступа
+    name:  update_permissions
+    app: permissions
+    action: update
+  - label: Создание прав доступа
+    name:  create_permissions
+    app: permissions
+    action: create
+  - label: Удаление прав доступа
+    name:  delete_permissions
+    app: permissions
+    action: delete
+
+roles:
+  - label: Администратор
+    name: admin
+    permissions: [
+      'get_users',
+      'update_users',
+      'create_users',
+      'delete_users',
+      'get_roles',
+      'update_roles',
+      'create_roles',
+      'delete_roles',
+      'get_permissions',
+      'update_permissions',
+      'create_permissions',
+      'delete_permissions',
+     ]
+  - label: Модератор
+    name: moderator
+    permissions: [
+      'get_users',
+      'update_users',
+      'create_users',
+    ]
+  - label: Специалист
+    name: specialist
+    permissions: []
+
+  - label: Тестировщик
+    name: tester
+    permissions: [
+      'get_users',
+      'update_users',
+      'create_users',
+      'delete_users',
+      'get_roles',
+      'update_roles',
+      'create_roles',
+      'delete_roles',
+      'get_permissions',
+      'update_permissions',
+      'create_permissions',
+      'delete_permissions',
+    ]
+
+users:
+  - email: admin@mail.com
+    roles: ['admin', 'moderator']
+    is_active: true
+  - email: moderator@mail.com
+    roles: [ 'moderator' ]
+    is_active: true
+  - email: specialist@mail.com
+    roles: ['specialist']
+    is_active: false
+  - email: login@mail.com
+    roles: ['specialist']
+    is_active: true
+  - email: reset-password@mail.com
+    roles: [ 'specialist' ]
+    is_active: true
+  - email: login-not-enabled@mail.com
+    roles: ['specialist']
+    is_active: false
+  - email: user-to-remove-enabled@mail.com
+    roles: ['specialist']
+    is_active: false
