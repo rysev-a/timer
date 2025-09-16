@@ -1,4 +1,7 @@
 import i18n from "i18next";
+import athleteCreate from "@/core/locale/ru/athletes/athleteCreate";
+import athleteDetail from "@/core/locale/ru/athletes/athleteDetail";
+import athleteList from "@/core/locale/ru/athletes/athleteList";
 import loginForm from "@/core/locale/ru/loginForm";
 import navMenu from "@/core/locale/ru/navMenu";
 import pagination from "@/core/locale/ru/pagination";
@@ -52,6 +55,10 @@ i18n.init({
 
         raceList,
         raceDetail,
+
+        athleteList,
+        athleteDetail,
+        athleteCreate,
 
         permissionList,
         userDetail,

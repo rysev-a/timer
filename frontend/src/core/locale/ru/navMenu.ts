@@ -6,6 +6,7 @@ export default {
   projects: "Проекты",
   projectsAll: "Все проекты",
 
+  timer: "Таймер",
   races: "Гонки",
-  racesAll: "Все гонки",
+  athletes: "Участники",
 };

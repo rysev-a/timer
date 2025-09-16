@@ -17,9 +17,12 @@ import { Route as AuthResetPasswordRouteImport } from './routes/auth/reset-passw
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as _authRacesIndexRouteImport } from './routes/__auth/races/index'
 import { Route as _authProjectsIndexRouteImport } from './routes/__auth/projects/index'
+import { Route as _authAthletesIndexRouteImport } from './routes/__auth/athletes/index'
 import { Route as _authRacesNewRouteImport } from './routes/__auth/races/new'
 import { Route as _authProjectsNewRouteImport } from './routes/__auth/projects/new'
 import { Route as _authProjectsIdRouteImport } from './routes/__auth/projects/$id'
+import { Route as _authAthletesNewRouteImport } from './routes/__auth/athletes/new'
+import { Route as _authAthletesIdRouteImport } from './routes/__auth/athletes/$id'
 import { Route as _authRacesIdIndexRouteImport } from './routes/__auth/races/$id/index'
 import { Route as _authAdminUsersIndexRouteImport } from './routes/__auth/admin/users/index'
 import { Route as _authAdminRolesIndexRouteImport } from './routes/__auth/admin/roles/index'
@@ -71,6 +74,11 @@ const _authProjectsIndexRoute = _authProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => _authRoute,
 } as any)
+const _authAthletesIndexRoute = _authAthletesIndexRouteImport.update({
+  id: '/athletes/',
+  path: '/athletes/',
+  getParentRoute: () => _authRoute,
+} as any)
 const _authRacesNewRoute = _authRacesNewRouteImport.update({
   id: '/races/new',
   path: '/races/new',
@@ -84,6 +92,16 @@ const _authProjectsNewRoute = _authProjectsNewRouteImport.update({
 const _authProjectsIdRoute = _authProjectsIdRouteImport.update({
   id: '/projects/$id',
   path: '/projects/$id',
+  getParentRoute: () => _authRoute,
+} as any)
+const _authAthletesNewRoute = _authAthletesNewRouteImport.update({
+  id: '/athletes/new',
+  path: '/athletes/new',
+  getParentRoute: () => _authRoute,
+} as any)
+const _authAthletesIdRoute = _authAthletesIdRouteImport.update({
+  id: '/athletes/$id',
+  path: '/athletes/$id',
   getParentRoute: () => _authRoute,
 } as any)
 const _authRacesIdIndexRoute = _authRacesIdIndexRouteImport.update({
@@ -150,9 +168,12 @@ export interface FileRoutesByFullPath {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/start-reset-password': typeof AuthStartResetPasswordRoute
   '/': typeof _authIndexRoute
+  '/athletes/$id': typeof _authAthletesIdRoute
+  '/athletes/new': typeof _authAthletesNewRoute
   '/projects/$id': typeof _authProjectsIdRoute
   '/projects/new': typeof _authProjectsNewRoute
   '/races/new': typeof _authRacesNewRoute
+  '/athletes': typeof _authAthletesIndexRoute
   '/projects': typeof _authProjectsIndexRoute
   '/races': typeof _authRacesIndexRoute
   '/admin/permissions/$id': typeof _authAdminPermissionsIdRoute
@@ -173,9 +194,12 @@ export interface FileRoutesByTo {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/start-reset-password': typeof AuthStartResetPasswordRoute
   '/': typeof _authIndexRoute
+  '/athletes/$id': typeof _authAthletesIdRoute
+  '/athletes/new': typeof _authAthletesNewRoute
   '/projects/$id': typeof _authProjectsIdRoute
   '/projects/new': typeof _authProjectsNewRoute
   '/races/new': typeof _authRacesNewRoute
+  '/athletes': typeof _authAthletesIndexRoute
   '/projects': typeof _authProjectsIndexRoute
   '/races': typeof _authRacesIndexRoute
   '/admin/permissions/$id': typeof _authAdminPermissionsIdRoute
@@ -198,9 +222,12 @@ export interface FileRoutesById {
   '/auth/reset-password': typeof AuthResetPasswordRoute
   '/auth/start-reset-password': typeof AuthStartResetPasswordRoute
   '/__auth/': typeof _authIndexRoute
+  '/__auth/athletes/$id': typeof _authAthletesIdRoute
+  '/__auth/athletes/new': typeof _authAthletesNewRoute
   '/__auth/projects/$id': typeof _authProjectsIdRoute
   '/__auth/projects/new': typeof _authProjectsNewRoute
   '/__auth/races/new': typeof _authRacesNewRoute
+  '/__auth/athletes/': typeof _authAthletesIndexRoute
   '/__auth/projects/': typeof _authProjectsIndexRoute
   '/__auth/races/': typeof _authRacesIndexRoute
   '/__auth/admin/permissions/$id': typeof _authAdminPermissionsIdRoute
@@ -223,9 +250,12 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/start-reset-password'
     | '/'
+    | '/athletes/$id'
+    | '/athletes/new'
     | '/projects/$id'
     | '/projects/new'
     | '/races/new'
+    | '/athletes'
     | '/projects'
     | '/races'
     | '/admin/permissions/$id'
@@ -246,9 +276,12 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/start-reset-password'
     | '/'
+    | '/athletes/$id'
+    | '/athletes/new'
     | '/projects/$id'
     | '/projects/new'
     | '/races/new'
+    | '/athletes'
     | '/projects'
     | '/races'
     | '/admin/permissions/$id'
@@ -270,9 +303,12 @@ export interface FileRouteTypes {
     | '/auth/reset-password'
     | '/auth/start-reset-password'
     | '/__auth/'
+    | '/__auth/athletes/$id'
+    | '/__auth/athletes/new'
     | '/__auth/projects/$id'
     | '/__auth/projects/new'
     | '/__auth/races/new'
+    | '/__auth/athletes/'
     | '/__auth/projects/'
     | '/__auth/races/'
     | '/__auth/admin/permissions/$id'
@@ -354,6 +390,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof _authProjectsIndexRouteImport
       parentRoute: typeof _authRoute
     }
+    '/__auth/athletes/': {
+      id: '/__auth/athletes/'
+      path: '/athletes'
+      fullPath: '/athletes'
+      preLoaderRoute: typeof _authAthletesIndexRouteImport
+      parentRoute: typeof _authRoute
+    }
     '/__auth/races/new': {
       id: '/__auth/races/new'
       path: '/races/new'
@@ -373,6 +416,20 @@ declare module '@tanstack/react-router' {
       path: '/projects/$id'
       fullPath: '/projects/$id'
       preLoaderRoute: typeof _authProjectsIdRouteImport
+      parentRoute: typeof _authRoute
+    }
+    '/__auth/athletes/new': {
+      id: '/__auth/athletes/new'
+      path: '/athletes/new'
+      fullPath: '/athletes/new'
+      preLoaderRoute: typeof _authAthletesNewRouteImport
+      parentRoute: typeof _authRoute
+    }
+    '/__auth/athletes/$id': {
+      id: '/__auth/athletes/$id'
+      path: '/athletes/$id'
+      fullPath: '/athletes/$id'
+      preLoaderRoute: typeof _authAthletesIdRouteImport
       parentRoute: typeof _authRoute
     }
     '/__auth/races/$id/': {
@@ -457,9 +514,12 @@ declare module '@tanstack/react-router' {
 
 interface _authRouteChildren {
   _authIndexRoute: typeof _authIndexRoute
+  _authAthletesIdRoute: typeof _authAthletesIdRoute
+  _authAthletesNewRoute: typeof _authAthletesNewRoute
   _authProjectsIdRoute: typeof _authProjectsIdRoute
   _authProjectsNewRoute: typeof _authProjectsNewRoute
   _authRacesNewRoute: typeof _authRacesNewRoute
+  _authAthletesIndexRoute: typeof _authAthletesIndexRoute
   _authProjectsIndexRoute: typeof _authProjectsIndexRoute
   _authRacesIndexRoute: typeof _authRacesIndexRoute
   _authAdminPermissionsIdRoute: typeof _authAdminPermissionsIdRoute
@@ -477,9 +537,12 @@ interface _authRouteChildren {
 
 const _authRouteChildren: _authRouteChildren = {
   _authIndexRoute: _authIndexRoute,
+  _authAthletesIdRoute: _authAthletesIdRoute,
+  _authAthletesNewRoute: _authAthletesNewRoute,
   _authProjectsIdRoute: _authProjectsIdRoute,
   _authProjectsNewRoute: _authProjectsNewRoute,
   _authRacesNewRoute: _authRacesNewRoute,
+  _authAthletesIndexRoute: _authAthletesIndexRoute,
   _authProjectsIndexRoute: _authProjectsIndexRoute,
   _authRacesIndexRoute: _authRacesIndexRoute,
   _authAdminPermissionsIdRoute: _authAdminPermissionsIdRoute,

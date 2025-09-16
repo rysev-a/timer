@@ -5,8 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Form, FormField } from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { httpClient } from "@/core/api";
@@ -16,7 +15,7 @@ import RaceDetailAthletes from "./RaceDetailAthletes";
 
 const UpdateRaceFormSchema = z.object({
   name: z.string(),
-  roles: z.array(z.object({ id: z.string(), name: z.string() })),
+  athletes: z.array(z.object({ id: z.string(), name: z.string() })),
 });
 
 export default function RaceDetail({ race }: { race: RaceType }) {

@@ -13,6 +13,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import i18n from "@/core/i18n";
 import { isUserRoles } from "@/package";
@@ -34,6 +35,14 @@ export interface NavMenuItemConfig {
 }
 
 export function NavMain() {
+  const { isMobile, setOpenMobile } = useSidebar();
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
+
   const items = useMemo(
     (): NavMenuSectionConfig[] => [
       {
@@ -62,15 +71,20 @@ export function NavMain() {
       },
       {
         enabled: true,
-        title: i18n.t("navMenu.races"),
+        title: i18n.t("navMenu.timer"),
         url: "#",
         icon: SquareTerminal,
         isActive: false,
         items: [
           {
             enabled: true,
-            title: i18n.t("navMenu.racesAll"),
+            title: i18n.t("navMenu.races"),
             url: "/races",
+          },
+          {
+            enabled: true,
+            title: i18n.t("navMenu.athletes"),
+            url: "/athletes",
           },
         ],
       },
@@ -106,7 +120,7 @@ export function NavMain() {
                       .map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <Link to={subItem.url}>
+                            <Link to={subItem.url} onClick={handleLinkClick}>
                               <span>{subItem.title}</span>
                             </Link>
                           </SidebarMenuSubButton>

@@ -15,8 +15,8 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 export interface BreadCrumbConfig {
   label: string;
   path: string;
-  params: object;
   isSeparator: boolean;
+  params?: object;
 }
 
 export const breadCrumbsStore = new Store<BreadCrumbConfig[]>([]);

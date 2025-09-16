@@ -20,7 +20,6 @@ class RaceModel(UUIDAuditBase):
 
 class AthleteModel(UUIDAuditBase):
     __tablename__ = "athletes"
-
     name: Mapped[str] = mapped_column(unique=True, nullable=False)
 
 
@@ -31,7 +30,7 @@ class RaceAthleteModel(UUIDAuditBase):
         ForeignKey("races.id", ondelete="CASCADE"), primary_key=True
     )
     athlete_id: Mapped[UUID] = mapped_column(
-        ForeignKey("athletes.id"), primary_key=True
+        ForeignKey("athletes.id", ondelete="CASCADE"), primary_key=True
     )
 
 
@@ -42,7 +41,7 @@ class LapModel(UUIDAuditBase):
         ForeignKey("races.id", ondelete="CASCADE"), primary_key=True
     )
     athlete_id: Mapped[UUID] = mapped_column(
-        ForeignKey("athletes.id"), primary_key=True
+        ForeignKey("athletes.id", ondelete="CASCADE"), primary_key=True
     )
     count: Mapped[int]
     start_time: Mapped[datetime] = mapped_column(nullable=False)

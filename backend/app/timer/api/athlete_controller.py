@@ -8,7 +8,7 @@ from advanced_alchemy.extensions.litestar.providers import (
 )
 from advanced_alchemy.filters import FilterTypes
 from advanced_alchemy.service import OffsetPagination
-from litestar import get
+from litestar import get, delete, patch, post
 from litestar.controller import Controller
 from litestar.dto import DTOConfig
 from litestar.params import Dependency
@@ -72,54 +72,32 @@ class AthleteController(Controller):
         print(item_id)
         return await service.get(item_id)
 
-    # @delete(
-    #     operation_id="DeleteProject",
-    #     path="/{item_id:uuid}",
-    #     guards=[is_project_owner],
-    # )
-    # async def delete_item(
-    #     self,
-    #     item_id: UUID,
-    #     service: ProjectService,
-    # ) -> None:
-    #     await service.delete(item_id)
+    @delete(
+        operation_id="DeleteAthlete",
+        path="/{item_id:uuid}",
+    )
+    async def delete_item(
+        self,
+        item_id: UUID,
+        service: AthleteService,
+    ) -> None:
+        await service.delete(item_id)
 
-    # @patch(
-    #     operation_id="PatchProject",
-    #     path="/{item_id:uuid}",
-    #     guards=[is_project_owner],
-    # )
-    # async def patch_item(
-    #     self,
-    #     item_id: UUID,
-    #     data: PatchProjectRequest,
-    #     service: ProjectService,
-    # ) -> ProjectModel:
-    #     if await service.get_one_or_none(
-    #         and_(ProjectModel.name == data.name, ProjectModel.id != item_id)
-    #     ):
-    #         raise HTTPException(
-    #             status_code=HTTP_409_CONFLICT,
-    #             detail="Project already exists",
-    #         )
+    @patch(
+        operation_id="PatchAthlete",
+        path="/{item_id:uuid}",
+    )
+    async def patch_item(
+        self,
+        item_id: UUID,
+        data: PatchAthleteRequest,
+        service: AthleteService,
+    ) -> AthleteModel:
+        data = msgspec.to_builtins(data)
+        return await service.update(AthleteModel(id=item_id, **data), auto_commit=True)
 
-    #     data = msgspec.to_builtins(data)
-    #     return await service.update(ProjectModel(id=item_id, **data), auto_commit=True)
-
-    # @post(operation_id="CreateProject", path="/")
-    # async def create_item(
-    #     self, data: CreateProjectRequest, service: ProjectService, request: Request
-    # ) -> ProjectModel:
-    #     if await service.get_one_or_none(ProjectModel.name == data.name):
-    #         raise HTTPException(
-    #             status_code=HTTP_409_CONFLICT,
-    #             detail="Project already exists",
-    #         )
-
-    #     return await service.create(
-    #         ProjectModel(
-    #             name=data.name,
-    #             description=data.description,
-    #             user_id=request.user.get("id"),
-    #         )
-    #     )
+    @post(operation_id="CreateAthlete", path="/")
+    async def create_item(
+        self, data: CreateAthleteRequest, service: AthleteService
+    ) -> AthleteModel:
+        return await service.create(AthleteModel(name=data.name))
