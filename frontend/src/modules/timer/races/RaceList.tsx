@@ -87,7 +87,7 @@ export default function RaceList() {
       {
         id: "actions",
         enableHiding: false,
-        header: () => i18n.t("userList.actions"),
+        header: () => i18n.t("raceList.actions"),
         cell: ({ row }) => {
           const item = row.original;
           return (
@@ -211,7 +211,7 @@ export default function RaceList() {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {i18n.t("raceList.noResults")}
                 </TableCell>
               </TableRow>
             )}

@@ -119,7 +119,7 @@ export function AthleteList() {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {i18n.t("athleteList.noResults")}
               </TableCell>
             </TableRow>
           )}

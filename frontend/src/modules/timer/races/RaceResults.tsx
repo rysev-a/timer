@@ -1,5 +1,8 @@
-import { Play, StopCircle, Timer, Trash2 } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { MonitorStop, Play, Square, SquareStop, StopCircle, Timer, Trash2 } from "lucide-react";
 import * as React from "react";
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -9,16 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { AthleteType, LapType, RaceType } from "@/modules/timer/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { httpClient } from "@/core/api";
-import { useCallback } from "react";
-import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import type { AthleteType, LapType, RaceType } from "@/modules/timer/types";
 
 export default function RaceResults({ race }: { race: RaceType }) {
   const raceAthletes = useQuery({
-    queryFn: async () =>
-      (await httpClient.get("/api/timer/races-athletes")).data,
+    queryFn: async () => (await httpClient.get("/api/timer/races-athletes")).data,
     queryKey: ["races-athletes"],
   });
 
@@ -37,15 +37,6 @@ export default function RaceResults({ race }: { race: RaceType }) {
     },
   });
 
-  const continueRaceQuery = useMutation({
-    mutationFn: (data: Partial<Omit<LapType, "id">>) => {
-      return httpClient.post("/api/timer/laps/continue", data);
-    },
-    onSuccess: () => {
-      return queryClient.invalidateQueries({ queryKey: ["laps"] });
-    },
-  });
-
   const stopRaceQuery = useMutation({
     mutationFn: (data: Partial<Omit<LapType, "id">>) => {
       return httpClient.post("/api/timer/laps/stop", data);
@@ -55,28 +46,27 @@ export default function RaceResults({ race }: { race: RaceType }) {
     },
   });
 
-  const continueRace = useCallback(({ raceId, athleteId }) => {
-    continueRaceQuery.mutateAsync({
-      race_id: raceId,
-      athlete_id: athleteId,
-    });
-  }, []);
+  const stopRace = useCallback(
+    ({ raceId, athleteId }) => {
+      stopRaceQuery.mutateAsync({
+        race_id: raceId,
+        athlete_id: athleteId,
+      });
+    },
+    [stopRaceQuery],
+  );
 
-  const stopRace = useCallback(({ raceId, athleteId }) => {
-    stopRaceQuery.mutateAsync({
-      race_id: raceId,
-      athlete_id: athleteId,
-    });
-  }, []);
-
-  const run = useCallback(({ raceId, athleteId }) => {
-    createLapQuery.mutateAsync({
-      count: 0,
-      race_id: raceId,
-      athlete_id: athleteId,
-      start_time: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss+03:00"),
-    });
-  }, []);
+  const run = useCallback(
+    ({ raceId, athleteId }) => {
+      createLapQuery.mutateAsync({
+        count: 0,
+        race_id: raceId,
+        athlete_id: athleteId,
+        start_time: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss+03:00"),
+      });
+    },
+    [createLapQuery],
+  );
 
   return (
     <div>
@@ -91,28 +81,38 @@ export default function RaceResults({ race }: { race: RaceType }) {
         </TableHeader>
         <TableBody>
           {race.athletes.map((athlete: AthleteType) => {
+            const athleteLaps = (laps?.data?.items || []).filter((lap) => {
+              return lap.race_id === race.id && lap.athlete_id === athlete.id;
+            });
+
+            const playIsDisabled = athleteLaps.length > 0;
+            const continueDisabled = athleteLaps.length === 0;
+
+            const startTime = athleteLaps.length > 0 ? new Date(athleteLaps[0].start_time) : null;
+
             return (
               <TableRow key={athlete.id}>
                 <TableCell>{athlete.name}</TableCell>
                 <TableCell>
                   {(laps?.data?.items || [])
                     .filter((lap) => {
-                      return (
-                        lap.race_id === race.id && lap.athlete_id === athlete.id
-                      );
+                      return lap.race_id === race.id && lap.athlete_id === athlete.id;
                     })
                     .map((lap) => {
-                      return (
-                        <div key={lap.id}>
-                          {lap.start_time.slice(11, 19)} -{" "}
-                          {lap.end_time ? lap.end_time.slice(11, 19) : ""}
-                        </div>
-                      );
+                      const diff =
+                        new Date(lap.start_time).getTime() - (startTime as Date).getTime();
+                      const seconds = diff / 1000;
+
+                      return <div key={lap.id}>{seconds}</div>;
                     })}
                 </TableCell>
                 <TableCell className={"space-x-2"}>
                   <Button
+                    disabled={playIsDisabled}
                     variant={"secondary"}
+                    className={cn("cursor-pointer", {
+                      "opacity-10": playIsDisabled,
+                    })}
                     onClick={() => {
                       run({
                         raceId: race.id,
@@ -120,12 +120,14 @@ export default function RaceResults({ race }: { race: RaceType }) {
                       });
                     }}
                   >
-                    <Play color="red" />
+                    <Play color="red" className={cn({ "opacity-10": playIsDisabled })} />
                   </Button>
                   <Button
                     variant={"secondary"}
+                    className={"cursor-pointer"}
+                    disabled={continueDisabled}
                     onClick={() => {
-                      continueRace({
+                      run({
                         raceId: race.id,
                         athleteId: athlete.id,
                       });
@@ -136,6 +138,7 @@ export default function RaceResults({ race }: { race: RaceType }) {
 
                   <Button
                     variant={"secondary"}
+                    className={"cursor-pointer"}
                     onClick={() => {
                       stopRace({
                         raceId: race.id,
@@ -143,7 +146,7 @@ export default function RaceResults({ race }: { race: RaceType }) {
                       });
                     }}
                   >
-                    <StopCircle color="black" />
+                    <Square color="black" />
                   </Button>
                 </TableCell>
               </TableRow>
