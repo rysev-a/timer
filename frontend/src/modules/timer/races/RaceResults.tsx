@@ -103,7 +103,7 @@ export default function RaceResults({ race }: { race: RaceType }) {
                         new Date(lap.start_time).getTime() - (startTime as Date).getTime();
                       const seconds = diff / 1000;
 
-                      return <span key={lap.id}>{seconds}</span>;
+                      return <span key={lap.id}>{seconds} </span>;
                     })}
                 </TableCell>
                 <TableCell className={"space-x-2"}>
